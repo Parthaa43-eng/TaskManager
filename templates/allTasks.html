@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>All Tasks</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    body {
+        background-color: #f8f9fa;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .btn-modern {
+        background: linear-gradient(135deg, #4CAF50, #2E7D32);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 10px 20px;
+        font-weight: 500;
+        font-size: 1rem;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+
+    .btn-modern:hover {
+        background: linear-gradient(135deg, #43A047, #1B5E20);
+        transform: translateY(-2px);
+    }
+
+    .btn-action {
+        padding: 8px 12px;
+        margin: 3px;
+        border-radius: 10px;
+        font-size: 0.9rem;
+    }
+
+    .btn-outline-primary:hover,
+    .btn-outline-success:hover,
+    .btn-outline-danger:hover {
+        transform: scale(1.08);
+        transition: 0.2s ease-in-out;
+    }
+
+    .badge-custom {
+        font-size: 0.85rem;
+        padding: 6px 10px;
+        border-radius: 8px;
+    }
+
+    table {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    td, th {
+        vertical-align: middle;
+    }
+
+</style>
+
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold">🗓️ Your Task List</h2>
+        <a href="/add" class="btn btn-modern">➕ Add Task</a>
+    </div>
+
+    <table class="table table-hover shadow-sm rounded border">
+        <thead class="table-dark">
+            <tr>
+                <th>S.No</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Scheduled</th>
+                <th>Remind</th>
+                <th>Status</th>
+                <th>Email</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.sno }}</td>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description or '-' }}</td>
+                <td>{{ task.scheduled_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>{{ task.remind_before }} mins</td>
+                <td>
+                    {% if task.status == 'Done' %}
+                        <span class="badge bg-success badge-custom">{{ task.status }}</span>
+                    {% else %}
+                        <span class="badge bg-warning text-dark badge-custom">{{ task.status }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ task.user_email }}</td>
+                <td>{{ task.date_created.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <a href="/update/{{ task.sno }}" class="btn btn-outline-primary btn-sm btn-action">✏️</a>
+                    <a href="/complete/{{ task.sno }}" class="btn btn-outline-success btn-sm btn-action">✅</a>
+                    <a href="/delete/{{ task.sno }}" class="btn btn-outline-danger btn-sm btn-action">🗑️</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="9" class="text-center">No tasks found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
